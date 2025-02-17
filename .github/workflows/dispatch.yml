@@ -1,0 +1,12 @@
+# название workflow
+name: Run project tests
+# на какой триггер/событие workflow будет реагировать
+on: workflow_dispatch
+#
+jobs:
+  #имя "работы" которая будет запускаться при отработке события on:
+  manualRunTest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print to console
+        run: echo Hello GH Actions!
