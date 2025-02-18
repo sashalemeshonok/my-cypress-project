@@ -18,4 +18,4 @@ jobs:
       - name: Install dependecies
         run: npm ci
       - name: Runing tests
-        run: npm cypress:test
+        run: npm run cypress:test
