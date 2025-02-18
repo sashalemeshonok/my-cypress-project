@@ -1,0 +1,30 @@
+name: Runing test after push
+
+on: push
+
+jobs:
+  working-with-kufar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository codeтся когда мы как шаг используем готовый action от github
+        uses: actions/checkout@v3
+      - name: Install dependecies
+        run: npm ci
+      - name: Runing tests
+        run: npm run cypress:test:first
+  working-with-auto-kufar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository codeтся когда мы как шаг используем готовый action от github
+        uses: actions/checkout@v3
+      - name: Install dependecies
+        run: npm ci
+      - name: Runing tests
+        run: npm run cypress:test:second
+
+
+        
+# создание и запуск нескольких jobs в одном файле идет паралельно не зависимо от других
+
+#  но при наличии нескольких jobs мы можем ими управлять
+# используем свойство needs чт

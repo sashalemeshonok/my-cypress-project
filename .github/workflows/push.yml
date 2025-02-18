@@ -1,9 +1,9 @@
 name: Runing test after push
 
-on: push
+on:
 
 jobs:
-  runingTestsAfterPush:
+  runing-tests-after-push:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
@@ -11,9 +11,11 @@ jobs:
         uses: actions/checkout@v3
         #  with параметр в котором мы описываем что action будет работать с определнными параметрами
         # with:
-      # - name: Install cypress
-      #   run: npm install cypress
       - name: Install dependecies
         run: npm ci
       - name: Runing tests
-        run: npm run cypress:test
+        run: npm run cypress:test:first
+# создание и запуск нескольких jobs в одном файле идет паралельно не зависимо от других
+
+#  но при наличии нескольких jobs мы можем ими управлять
+# используем свойство needs чтобы указать какой job нам нужно
