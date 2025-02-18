@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cypress:test": "cypress open specPattern='cypress/e2e/workflow.cy.js'"
+    "cypress:test": "cypress run specPattern='cypress/e2e/workflow.cy.js'"
   },
   "keywords": [],
   "author": "",
