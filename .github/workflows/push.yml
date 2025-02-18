@@ -3,7 +3,7 @@ name: Run test after push
 on: push
 
 jobs:
-  runing tests after push:
+  runingTestsAfterPush:
     runs-on: ubuntu-latest
     steps:
       - name: Get repository code
