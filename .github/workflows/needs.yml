@@ -1,4 +1,4 @@
-name: Runing test after push
+name: Runing tests in other jobs after push
 
 on: push
 
@@ -21,9 +21,6 @@ jobs:
         run: npm ci
       - name: Runing tests
         run: npm run cypress:test:second
-
-
-        
 # создание и запуск нескольких jobs в одном файле идет паралельно не зависимо от других
 
 #  но при наличии нескольких jobs мы можем ими управлять
