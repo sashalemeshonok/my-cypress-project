@@ -5,8 +5,9 @@ on: push
 jobs:
   working-with-kufar:
     runs-on: ubuntu-latest
+    needs: working-with-auto-kufar
     steps:
-      - name: Get repository codeтся когда мы как шаг используем готовый action от github
+      - name: Get repository code
         uses: actions/checkout@v3
       - name: Install dependecies
         run: npm ci
@@ -15,7 +16,7 @@ jobs:
   working-with-auto-kufar:
     runs-on: ubuntu-latest
     steps:
-      - name: Get repository codeтся когда мы как шаг используем готовый action от github
+      - name: Get repository code
         uses: actions/checkout@v3
       - name: Install dependecies
         run: npm ci
