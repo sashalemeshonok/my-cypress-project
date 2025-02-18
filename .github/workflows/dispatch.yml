@@ -1,5 +1,5 @@
 # название workflow
-name: Run project tests
+name: Run project tests manual
 # на какой триггер/событие workflow будет реагировать
 on: workflow_dispatch
 #
