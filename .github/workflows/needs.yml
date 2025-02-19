@@ -1,3 +1,5 @@
+# запус jobs одной задругой указывая в ключе needs: ${название job после которой делать запуск}
+
 name: Runing tests in other jobs after push
 
 on: push
