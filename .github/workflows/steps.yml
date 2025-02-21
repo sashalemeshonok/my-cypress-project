@@ -12,6 +12,6 @@ jobs:
         run: npm ci
       - name: Runing tests
         run: npm run cypress:test:first
-        continue-on-error: true
+        # continue-on-error: true
       - name: Runing tests
         run: npm run cypress:test:second
