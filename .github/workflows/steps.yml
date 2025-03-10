@@ -1,6 +1,8 @@
 name: Runing tests in other jobs after push
 
-on: push
+on:
+  push:
+    branche: [main]
 
 jobs:
   working-with-kufar:
@@ -8,6 +10,11 @@ jobs:
     steps:
       - name: Get repository code
         uses: actions/checkout@v3
+      - name: Cashe dependecies
+        uses: actions/cashe@v3
+        with:
+          path: ~/.npm
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependecies
         run: npm ci
       - name: Runing tests
@@ -15,3 +22,5 @@ jobs:
         continue-on-error: true
       - name: Runing tests
         run: npm run cypress:test:second
+      - name: Get rep object
+        run: echo "${{}}"

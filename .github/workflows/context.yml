@@ -1,0 +1,10 @@
+name: Get github\`s context
+
+on:
+  push:
+jobs:
+  working-with-kufar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print context
+        run: echo "${{ github }"
