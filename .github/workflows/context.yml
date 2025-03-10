@@ -1,10 +1,9 @@
 name: Get github\`s context
 
-on:
-  push:
+on: workflow_dispatch
 jobs:
-  working-with-kufar:
+  print:
     runs-on: ubuntu-latest
     steps:
       - name: Print context
-        run: echo "${{ github }"
+        run: echo "${{ toJSON(github) }"
