@@ -10,13 +10,14 @@ jobs:
     steps:
       - name: Get repository code
         uses: actions/checkout@v3
-      - name: Cashe dependecies
-        uses: actions/cashe@v3
+
         # with:
         #   path: ~/.npm
         #   key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependecies
         run: npm ci
+      - name: Cashe dependecies
+        uses: actions/cashe@v3
       - name: Runing tests
         run: npm run cypress:test:first
         continue-on-error: true
