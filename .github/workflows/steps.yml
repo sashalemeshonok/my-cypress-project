@@ -23,4 +23,4 @@ jobs:
       - name: Runing tests
         run: npm run cypress:test:second
       - name: Get rep object
-        run: echo "${{}}"
+        run: echo "${{ github }}"
