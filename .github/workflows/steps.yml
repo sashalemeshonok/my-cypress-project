@@ -11,7 +11,7 @@ jobs:
       - name: Get repository code
         uses: actions/checkout@v3
       - name: Cashe dependecies
-        uses: actions/cashe@v4
+        uses: actions/cashe@v3
         with:
           path: ~/.npm
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
