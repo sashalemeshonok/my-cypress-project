@@ -1,6 +1,7 @@
 name: Get github\`s context
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 jobs:
   print:
     runs-on: ubuntu-latest
