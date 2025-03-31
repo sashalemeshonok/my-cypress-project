@@ -1,0 +1,93 @@
+{
+	"id": "8a820bdb-cda6-44f5-8c75-eac5192a62f8",
+	"name": "wallet env",
+	"values": [
+		{
+			"key": "LOGIN",
+			"value": "http://auth-proxy-pre.be-dev2.kuf.by",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "INT_LOGIN",
+			"value": "http://internal-auth-pre.be-dev2.kuf.by",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "WALLET_API_URL",
+			"value": "https://api.pre.kuf.by/ledger/v1/svc/wallet",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "user_acc_id",
+			"value": "1065",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "user_email",
+			"value": "kirill7893595@mail.ru",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "user_password",
+			"value": "123456",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "jwt",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "int_email",
+			"value": "goldcorn@kufar.by",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "int_password",
+			"value": "password",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "int_jwt",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "public_balance",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "internal_balance",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "amount",
+			"value": "50",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "balance_new",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-03-06T12:08:01.809Z",
+	"_postman_exported_using": "Postman/11.35.0-250304-1730"
+}

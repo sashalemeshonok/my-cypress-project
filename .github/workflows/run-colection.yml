@@ -1,0 +1,16 @@
+name: Running ledgers api tests
+
+on: push
+
+jobs:
+  Running tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman Collection
+        run: newman run ./postman/ledger_collection.json.json -e ./postman/pre.ledger_env.json
