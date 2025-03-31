@@ -13,4 +13,4 @@ jobs:
         run: npm install -g newman
 
       - name: Run Postman Collection
-        run: newman run postman/ledger_collection.json.json -e postman/pre.ledger_env.json
+        run: newman run postman/ledger_collection.json -e postman/pre.ledger_env.json
