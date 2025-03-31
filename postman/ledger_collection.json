@@ -39,6 +39,11 @@
 								"key": "X-App-Name",
 								"value": "Web Kufar",
 								"type": "text"
+							},
+							{
+								"key": "X-Device-ID",
+								"value": "{{$guid}}",
+								"type": "text"
 							}
 						],
 						"body": {
