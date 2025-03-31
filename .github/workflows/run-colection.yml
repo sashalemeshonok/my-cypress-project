@@ -1,6 +1,8 @@
-name: Running ledgers api tests 
+name: Running ledgers api tests
 
-on: push
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   running-tests:
