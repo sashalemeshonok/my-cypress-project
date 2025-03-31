@@ -3,7 +3,7 @@ name: Running ledgers api tests
 on: push
 
 jobs:
-  Running tests:
+  running-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
