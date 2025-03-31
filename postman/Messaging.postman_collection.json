@@ -1,0 +1,1156 @@
+{
+	"info": {
+		"_postman_id": "6a8a0b0d-0ded-4004-9fb2-db83693714c8",
+		"name": "Messaging",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23592784",
+		"_collection_link": "https://bold-water-495715.postman.co/workspace/API-TESTS-26.09~d2b20baa-6971-4da3-a677-0863c15ecf9f/collection/23592784-6a8a0b0d-0ded-4004-9fb2-db83693714c8?action=share&source=collection_link&creator=23592784"
+	},
+	"item": [
+		{
+			"name": "Blocking/unblocking sender by Recipient",
+			"item": [
+				{
+					"name": "Authentication by Sender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"jwt_sender\", jsonData.jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-App-Name",
+								"value": "Web Kufar",
+								"type": "text"
+							},
+							{
+								"key": "X-Device-ID",
+								"value": "{{$guid}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email_sender}}\",\n    \"password\": \"{{password_sender}}\",\n    \"recaptcha_user_response\": \"123\",\n    \"recaptcha_secret_version\": \"test\",\n    \"recaptcha_platform\": \"web\",\n    \"captcha_type\": \"recaptcha\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOGIN}}/v2/auth/signin?token_type=user",
+							"host": [
+								"{{LOGIN}}"
+							],
+							"path": [
+								"v2",
+								"auth",
+								"signin"
+							],
+							"query": [
+								{
+									"key": "token_type",
+									"value": "user"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"jwt_recipient\", jsonData.jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-App-Name",
+								"value": "Web Kufar",
+								"type": "text"
+							},
+							{
+								"key": "X-Device-ID",
+								"value": "{{$guid}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email_recipient}}\",\n    \"password\": \"{{password_recipient}}\",\n    \"recaptcha_user_response\": \"123\",\n    \"recaptcha_secret_version\": \"test\",\n    \"recaptcha_platform\": \"web\",\n    \"captcha_type\": \"recaptcha\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOGIN}}/v2/auth/signin?token_type=user",
+							"host": [
+								"{{LOGIN}}"
+							],
+							"path": [
+								"v2",
+								"auth",
+								"signin"
+							],
+							"query": [
+								{
+									"key": "token_type",
+									"value": "user"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get conversation info by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"const participant_id = jsonData.conversation_info.participant_info.id;",
+									"",
+									"pm.test(\"Set 'participant_id' param for blocking sender\", () => {",
+									"    pm.expect(participant_id).to.be.a('string');",
+									"    pm.expect(participant_id).to.have.lengthOf.at.least(1);",
+									"",
+									"    if (pm.expect(participant_id).to.have.lengthOf.at.least(1)) {",
+									"        pm.environment.set(\"participant_user_id\", participant_id);",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_recipient}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{CONVERS_INFO_API}}/conversations/{{blocked_conversation_id}}/messages?limit=50&offset=0",
+							"host": [
+								"{{CONVERS_INFO_API}}"
+							],
+							"path": [
+								"conversations",
+								"{{blocked_conversation_id}}",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Block seder user by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 202\", function () {",
+									"    pm.response.to.have.status(202);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_recipient}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"{{participant_user_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BLOCK_UNBLOK_CONVERS_API}}/user/block",
+							"host": [
+								"{{BLOCK_UNBLOK_CONVERS_API}}"
+							],
+							"path": [
+								"user",
+								"block"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get conversation info and check status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"const is_blocked_by_participant = jsonData.conversation_info.is_blocked_by_participant;",
+									"",
+									"pm.test(\"Check 'is_blocked_by_participant' and 'is_blocked_participant' value should be true\", () => {",
+									"    pm.expect(is_blocked_by_participant).to.be.a('boolean');",
+									"    pm.expect(is_blocked_by_participant).to.be.true;",
+									"    pm.expect(is_blocked_participant).to.be.a('boolean');",
+									"    pm.expect(is_blocked_participant).to.be.true;",
+									"})",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{CONVERS_INFO_API}}/conversations/{{blocked_conversation_id}}/messages?limit=50&offset=0",
+							"host": [
+								"{{CONVERS_INFO_API}}"
+							],
+							"path": [
+								"conversations",
+								"{{blocked_conversation_id}}",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unblock seder user by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(202);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_recipient}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"{{participant_user_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BLOCK_UNBLOK_CONVERS_API}}/user/unblock",
+							"host": [
+								"{{BLOCK_UNBLOK_CONVERS_API}}"
+							],
+							"path": [
+								"user",
+								"unblock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unblock seder user by Recipient Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(202);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InYyMCIsInNjaHYiOiIyIiwidHlwIjoiSldUIn0.eyJhaWQiOiI0MzcyNDM4IiwiY2FkIjpmYWxzZSwiZGlkIjoiM2QyNjkxZDUxZjc2ZjcwOGNhMzI2Yzc1ZWI3MzlkZWQiLCJleHAiOjE3NzQ4MDI2NDMsImlhdCI6MTc0MjY2MTg0MywianRpIjoiNDM3MjQzODpkaWVDTjVodiIsInB0ciI6ZmFsc2UsInR5cCI6InVzZXIifQ.T5bSwlWhCQUZJG7Mf36XmOm-TzvOGCATaF08bU0OJDk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"Olfm17j5gtn31Ks-XrAwGCQ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.kufar.by/messaging-api/v2user/unblock/d33c2498-7d57-44b6-b8a1-57c672f84027",
+							"protocol": "https",
+							"host": [
+								"api",
+								"kufar",
+								"by"
+							],
+							"path": [
+								"messaging-api",
+								"v2user",
+								"unblock",
+								"d33c2498-7d57-44b6-b8a1-57c672f84027"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get conversation info and check status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"const is_blocked_by_participant = jsonData.conversation_info.is_blocked_by_participant;",
+									"",
+									"pm.test(\"Check is_blocked_by_participant value should be false\", () => {",
+									"    pm.expect(is_blocked_by_participant).to.be.a('boolean');",
+									"    pm.expect(is_blocked_by_participant).to.be.false;",
+									"    pm.expect(is_blocked_by_participant).to.be.a('boolean');",
+									"    pm.expect(is_blocked_by_participant).to.be.false;",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{CONVERS_INFO_API}}/conversations/{{blocked_conversation_id}}/messages?limit=50&offset=0",
+							"host": [
+								"{{CONVERS_INFO_API}}"
+							],
+							"path": [
+								"conversations",
+								"{{blocked_conversation_id}}",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Creating conversation",
+			"item": [
+				{
+					"name": "Authentication by Sender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"jwt_sender\", jsonData.jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-App-Name",
+								"value": "Web Kufar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email_sender}}\",\n    \"password\": \"{{password_sender}}\",\n    \"recaptcha_user_response\": \"123\",\n    \"recaptcha_secret_version\": \"test\",\n    \"recaptcha_platform\": \"web\",\n    \"captcha_type\": \"recaptcha\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOGIN}}/v2/auth/signin?token_type=user",
+							"host": [
+								"{{LOGIN}}"
+							],
+							"path": [
+								"v2",
+								"auth",
+								"signin"
+							],
+							"query": [
+								{
+									"key": "token_type",
+									"value": "user"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"jwt_recipient\", jsonData.jwt);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-App-Name",
+								"value": "Web Kufar",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email_recipient}}\",\n    \"password\": \"{{password_recipient}}\",\n    \"recaptcha_user_response\": \"123\",\n    \"recaptcha_secret_version\": \"test\",\n    \"recaptcha_platform\": \"web\",\n    \"captcha_type\": \"recaptcha\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOGIN}}/v2/auth/signin?token_type=user",
+							"host": [
+								"{{LOGIN}}"
+							],
+							"path": [
+								"v2",
+								"auth",
+								"signin"
+							],
+							"query": [
+								{
+									"key": "token_type",
+									"value": "user"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create conversation by Sender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Created conversation_id is not null\", function () {",
+									"    const convers_id = jsonData.conversation_id;",
+									"    const message_id = jsonData.message_id;",
+									"    pm.expect(convers_id).to.be.a('string');",
+									"    pm.expect(convers_id).to.have.lengthOf.at.least(1);",
+									"    pm.expect(message_id).to.be.a('string');",
+									"    pm.expect(message_id).to.have.lengthOf.at.least(1);",
+									"",
+									"    if (pm.expect(convers_id).to.have.lengthOf.at.least(1)) {",
+									"        pm.environment.set(\"created_conversation_id\", jsonData.conversation_id);",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ad_id\": {{ad_id_for_creating_conversation}},\n    \"message\": {\n        \"text\": \"Начинаю переписку с тобой в Postman!\",\n        \"type\": \"text\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{MANAGE_CONVERS_API}}/conversations",
+							"host": [
+								"{{MANAGE_CONVERS_API}}"
+							],
+							"path": [
+								"conversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list conversations by Sender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const createdConversId = pm.environment.get(\"created_conversation_id\");",
+									"const data = pm.response.json();",
+									"",
+									"pm.test(\"Check conversations array length after creating conversation by Sender\", () => {",
+									"    console.log(data.conversations.length)",
+									"    pm.expect(data.conversations.length).to.not.equal(0)  ",
+									"})",
+									"",
+									"let conversIdFound = false;",
+									"    ",
+									"for (let i = 0; i < data.conversations.length; i++) {",
+									"    if (data.conversations[i]['conversation_id'] === createdConversId) {",
+									"        conversIdFound = true;",
+									"        break;",
+									"    }",
+									"}",
+									"",
+									"pm.test(\"Сheck if a conversation exists in Sender conversations list\", () => {",
+									"    pm.expect(conversIdFound).to.be.true",
+									"})",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CONVERS_INFO_API}}/conversations?limit=10&offset=0",
+							"host": [
+								"{{CONVERS_INFO_API}}"
+							],
+							"path": [
+								"conversations"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list conversations by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const createdConversId = pm.environment.get(\"created_conversation_id\");",
+									"const data = pm.response.json();",
+									"",
+									"pm.test(\"Check conversations array length after creating conversation by Recipient\", () => {",
+									"    console.log(data.conversations.length)",
+									"    pm.expect(data.conversations.length).to.not.equal(0)",
+									"})",
+									"",
+									"let conversIdFound = false;",
+									"",
+									"for (let i = 0; i < data.conversations.length; i++) {",
+									"    if (data.conversations[i]['conversation_id'] === createdConversId) {",
+									"        conversIdFound = true;",
+									"        break;",
+									"    }",
+									"}",
+									"",
+									"pm.test(\"Сheck if a conversation exists in Recipient conversations list\", () => {",
+									"    pm.expect(conversIdFound).to.be.true",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CONVERS_INFO_API}}/conversations?limit=10&offset=0",
+							"host": [
+								"{{CONVERS_INFO_API}}"
+							],
+							"path": [
+								"conversations"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete conversation",
+			"item": [
+				{
+					"name": "Delete conversation by Sender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\": [\"{{created_conversation_id}}\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{MANAGE_CONVERS_API}}/conversations",
+							"host": [
+								"{{MANAGE_CONVERS_API}}"
+							],
+							"path": [
+								"conversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete conversation by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_recipient}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"ids\": [\"{{created_conversation_id}}\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{MANAGE_CONVERS_API}}/conversations",
+							"host": [
+								"{{MANAGE_CONVERS_API}}"
+							],
+							"path": [
+								"conversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list conversations by Sender",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check Sender list conversations after delete created conversation\", () => {",
+									"    const createdConversId = pm.environment.get(\"created_conversation_id\")",
+									"    const data = pm.response.json()",
+									"",
+									"    if (data.items !== 0) {",
+									"        for (let i = 0; i < data.conversations.length; i++) {",
+									"            console.log(data.conversations[i].conversation_id === createdConversId)",
+									"            if (data.conversations[i].conversation_id === createdConversId) {",
+									"                throw new Error(\"created_сonversation_id is on the list((((((\");",
+									"            }",
+									"        }",
+									"    } ",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CONVERS_INFO_API}}/conversations?limit=10&offset=0",
+							"host": [
+								"{{CONVERS_INFO_API}}"
+							],
+							"path": [
+								"conversations"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list conversations by Recipient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check list conversations after delete created conversation\", () => {",
+									"    const createdConversId = pm.environment.get(\"created_conversation_id\")",
+									"    const data = pm.response.json()",
+									"",
+									"    if (data.items !== 0) {",
+									"        for (let i = 0; i < data.conversations.length; i++) {",
+									"            if (data.conversations[i].conversation_id === createdConversId) {",
+									"                throw new Error(\"created_сonversation_id is on the list((((((\");",
+									"            }",
+									"        }",
+									"    } ",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_sender}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CONVERS_INFO_API}}/conversations?limit=10&offset=0",
+							"host": [
+								"{{CONVERS_INFO_API}}"
+							],
+							"path": [
+								"conversations"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
