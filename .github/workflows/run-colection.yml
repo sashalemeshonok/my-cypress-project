@@ -15,4 +15,4 @@ jobs:
         run: npm install -g newman
 
       - name: Run Postman Collection
-        run: newman run .my-cypress-project/postman/ledger_collection.json -e .my-cypress-project/postman/pre.ledger_env.json
+        run: newman run ledger_collection.json -e pre.ledger_env.json
